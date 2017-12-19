@@ -83,7 +83,7 @@ float ltr_ranker::score_one(const score_data& sd)
 
     // add 1.0 to the IDF to ensure that the result is positive
     float IDF_doc = fastapprox::fastlog(
-            1.0f + (sd.num_docs - sd.doc_count + 0.5f) / (sd.doc_count + 0.5f));
+            (sd.num_docs - sd.doc_count + 0.5f) / (sd.doc_count + 0.5f));
 
     float TF_doc = sd.doc_term_count;
 
