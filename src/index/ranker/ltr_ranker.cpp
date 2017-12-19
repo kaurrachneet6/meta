@@ -79,23 +79,12 @@ void ltr_ranker::save(std::ostream& out) const
 
 float ltr_ranker::score_one(const score_data& sd)
 {
-    float DL_doc = sd.doc_size;
-
-    float IDF_doc = fastapprox::fastlog(
-            (sd.num_docs - sd.doc_count + 0.5f) / (sd.doc_count + 0.5f));
-
-    float TF_doc = sd.doc_term_count;
-
     float BM25_doc = bm25_ranker.score_one(sd);
     float ABS_doc = abs_ranker.score_one(sd);
     float DIR_doc = dir_ranker.score_one(sd);
     float JM_doc = jm_ranker.score_one(sd);
 
     float score = 0.0;
-    score += weights_map["tf_doc"] * TF_doc;
-    score += weights_map["idf_doc"] * IDF_doc;
-    score += weights_map["tfidf_doc"] * (TF_doc * IDF_doc);
-    score += weights_map["dl_doc"] * DL_doc;
     score += weights_map["bm25_doc"] * BM25_doc;
     score += weights_map["abs_doc"] * ABS_doc;
     score += weights_map["dir_doc"] * DIR_doc;
