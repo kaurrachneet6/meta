@@ -4,6 +4,7 @@ add_library(meta-ranker absolute_discount.cpp
                         dirichlet_prior.cpp
                         jelinek_mercer.cpp
                         lm_ranker.cpp
+                        ltr_ranker.cpp
                         okapi_bm25.cpp
                         pivoted_length.cpp
                         kl_divergence_prf.cpp
