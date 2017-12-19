@@ -31,7 +31,7 @@ namespace index
  * [ranker]
  * method = "ltr_ranker"
  * weights = "path to file containing weights of trained model"
- * briefs = "path to file containing brief description of each weight in weights"
+ * briefs = "path to file containing brief description of weight in weights"
  * ~~~
  */
 class ltr_ranker : public ranking_function
@@ -60,16 +60,16 @@ class ltr_ranker : public ranking_function
     float score_one(const score_data& sd) override;
 
   private:
-    okapi_bm25 bm25_ranker;
-    absolute_discount abs_ranker;
-    dirichlet_prior dir_ranker;
-    jelinek_mercer jm_ranker;
+    okapi_bm25 bm25_ranker_;
+    absolute_discount abs_ranker_;
+    dirichlet_prior dir_ranker_;
+    jelinek_mercer jm_ranker_;
     /// weights of trained learn to rank model
-    std::vector<double> weights;
+    std::vector<double> weights_;
     /// brief of weights
-    std::vector<std::string> briefs;
+    std::vector<std::string> briefs_;
     /// mapping from brief to weight value
-    std::unordered_map<std::string, double> weights_map;
+    std::unordered_map<std::string, double> weights_map_;
 };
 
 /**

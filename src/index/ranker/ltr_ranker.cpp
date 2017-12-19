@@ -27,7 +27,7 @@ ltr_ranker::ltr_ranker(std::string& weights_path, std::string& briefs_path)
     for (std::size_t i = 0; i < num_lines; ++i)
     {
         std::getline(weights_in, line);
-        weights.push_back(std::stod(line));
+        weights_.push_back(std::stod(line));
     }
 
     num_lines = filesystem::num_lines(briefs_path);
@@ -35,60 +35,60 @@ ltr_ranker::ltr_ranker(std::string& weights_path, std::string& briefs_path)
     for (std::size_t i = 0; i < num_lines; ++i)
     {
         std::getline(briefs_in, line);
-        briefs.push_back(line);
+        briefs_.push_back(line);
     }
 
-    assert(weights.size() == briefs.size());
-    for (std::size_t i = 0; i < briefs.size(); ++i) {
-        weights_map[briefs[i]] = weights[i];
+    assert(weights_.size() == briefs_.size());
+    for (std::size_t i = 0; i < briefs_.size(); ++i) {
+        weights_map_[briefs_[i]] = weights_[i];
     }
-    assert(weights_map.size() == briefs.size());
+    assert(weights_map_.size() == briefs_.size());
 }
 
 ltr_ranker::ltr_ranker(std::istream& in)
 {
     auto size = io::packed::read<std::size_t>(in);
-    weights.resize(size);
+    weights_.resize(size);
     for (std::size_t i = 0; i < size; ++i)
-        io::packed::read(in, weights[i]);
+        io::packed::read(in, weights_[i]);
 
     size = io::packed::read<std::size_t>(in);
-    briefs.resize(size);
+    briefs_.resize(size);
     for (std::size_t i = 0; i < size; ++i)
-        io::packed::read(in, briefs[i]);
+        io::packed::read(in, briefs_[i]);
 
-    assert(weights.size() == briefs.size());
-    for (std::size_t i = 0; i < briefs.size(); ++i) {
-        weights_map[briefs[i]] = weights[i];
+    assert(weights_.size() == briefs_.size());
+    for (std::size_t i = 0; i < briefs_.size(); ++i) {
+        weights_map_[briefs_[i]] = weights_[i];
     }
-    assert(weights_map.size() == briefs.size());
+    assert(weights_map_.size() == briefs_.size());
 }
 
 void ltr_ranker::save(std::ostream& out) const
 {
     io::packed::write(out, id);
 
-    io::packed::write(out, weights.size());
-    for (const auto& weight : weights)
+    io::packed::write(out, weights_.size());
+    for (const auto& weight : weights_)
         io::packed::write(out, weight);
 
-    io::packed::write(out, briefs.size());
-    for (const auto& brief : briefs)
+    io::packed::write(out, briefs_.size());
+    for (const auto& brief : briefs_)
         io::packed::write(out, brief);
 }
 
 float ltr_ranker::score_one(const score_data& sd)
 {
-    float BM25_doc = bm25_ranker.score_one(sd);
-    float ABS_doc = abs_ranker.score_one(sd);
-    float DIR_doc = dir_ranker.score_one(sd);
-    float JM_doc = jm_ranker.score_one(sd);
+    float BM25_doc = bm25_ranker_.score_one(sd);
+    float ABS_doc = abs_ranker_.score_one(sd);
+    float DIR_doc = dir_ranker_.score_one(sd);
+    float JM_doc = jm_ranker_.score_one(sd);
 
     float score = 0.0;
-    score += weights_map["bm25_doc"] * BM25_doc;
-    score += weights_map["abs_doc"] * ABS_doc;
-    score += weights_map["dir_doc"] * DIR_doc;
-    score += weights_map["jm_doc"] * JM_doc;
+    score += weights_map_["bm25_doc"] * BM25_doc;
+    score += weights_map_["abs_doc"] * ABS_doc;
+    score += weights_map_["dir_doc"] * DIR_doc;
+    score += weights_map_["jm_doc"] * JM_doc;
 
     return score;
 }
