@@ -13,7 +13,7 @@
 
 #include "meta/index/ranker/ranker.h"
 #include "meta/index/ranker/ranker_factory.h"
-#include "meta/index/ranker/absulute_discount.h"
+#include "meta/index/ranker/absolute_discount.h"
 #include "meta/index/ranker/dirichlet_prior.h"
 #include "meta/index/ranker/jelinek_mercer.h"
 #include "meta/index/ranker/okapi_bm25.h"
