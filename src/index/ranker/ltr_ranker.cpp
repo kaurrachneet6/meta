@@ -26,16 +26,16 @@ ltr_ranker::ltr_ranker(std::string& weights_path, std::string& briefs_path)
     std::string line;
     for (std::size_t i = 0; i < num_lines; ++i)
     {
-        std::getline(in, line);
-        weights.push_back(line);
+        std::getline(weights_in, line);
+        weights.push_back(std::stod(line));
     }
 
     num_lines = filesystem::num_lines(briefs_path);
     std::ifstream briefs_in{briefs_path};
     for (std::size_t i = 0; i < num_lines; ++i)
     {
-        std::getline(in, line);
-        briefs.push_back(std::stod(line));
+        std::getline(briefs_in, line);
+        briefs.push_back(line);
     }
 
     assert(weights.size() == briefs.size());
